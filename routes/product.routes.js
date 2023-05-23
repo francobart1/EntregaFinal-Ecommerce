@@ -1,21 +1,26 @@
 const express = require('express');
 const api = express.Router();
 const productController = require('./../controllers/product.controller');
-const uploadController = require('../controllers/upload.controller.js');
+//const uploadController = require('../controllers/upload.controller.js');
+
+
 //obtener producto
 api.get('/products', productController.getAllProducts);
 
-api.get('/products/:id', productController.getProduct);
 //obtener un producto especifico
+api.get('/product/:id', productController.getProduct);
+
 //anadir un producto
 api.post('/product', productController.addProduct);
+
 //eliminar un producto
-api.delete('/products/:id', productController.deleteProduct);
+api.delete('/product/:id', productController.deleteProduct);
+
+
+//api.post('/product', uploadController.uploadProduct);
+
 //modificar un producto
-
-api.post('/product', uploadController.uploadProduct);
-
-api.get('/product', productController.updateProduct);
+api.put('/product/', productController.updateProduct);
 
 
 

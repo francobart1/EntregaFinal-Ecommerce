@@ -39,6 +39,7 @@ async function postUser(req, res) {
     
 }
 
+//Inicio
 const login = async(req, res) => {
 
     try {
@@ -85,7 +86,7 @@ const login = async(req, res) => {
 
 }
 
-
+//obtener usuario
 async function getUser(req, res) {
 
     const id = req.params.id;
@@ -171,6 +172,8 @@ async function updateUser(req, res) {
         return responseCreator(res, 500, `Error al actualizar el usuario`)
     }
 }
+
+//actualizar password
 async function updatePassword(req, res) {
     try {
         const id = req.params.id;

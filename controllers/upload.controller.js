@@ -1,7 +1,7 @@
 const multer = require('multer');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
-const Product = require('../schemas/product.shema')
+//const Product = require('../schemas/product.shema')
 
 const checkImageExist = async(req, res) => {
     if(req.body.imgage) {
@@ -50,7 +50,7 @@ const uploadMulter = multer({
     }
 })
 
-const uploadProduct = uploadMulter.single('file');
+//const uploadProduct = uploadMulter.single('file');
 
 
 
@@ -60,6 +60,6 @@ const uploadProduct = uploadMulter.single('file');
 
 
 module.exports = {
-    uploadProduct,
-    checkImageExist
+    //uploadProduct,
+    //checkImageExist
 }

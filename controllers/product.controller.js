@@ -1,5 +1,5 @@
 const { responseCreator } = require('../utils/utils');
-const Product = require('./../schemas/product.shema')
+const Product = require('../schemas/product.schema')
 
 //Obtener todos los usuarios
 const getAllProducts = async (req, res) => {
@@ -20,16 +20,18 @@ return responseCreator(res, 200, 'Productos obtenidos correctamente', {productos
 
 //Agregar Producto
 function addProduct(req, res){
-    console.log(req.body)
-    console.log(req.file)
 
     const product = new Product(req.body);
+    console.log(product)
 
 
+    product.save()
+                .then(function(product){
 
-    product.save().then(function(product){
-
-        res.status(200).send(`Añadir Producto`);
+            return res.status(200).send({
+                msg: 'Producto guardado corractamente',
+                product
+        })
 
 
 
@@ -39,13 +41,14 @@ function addProduct(req, res){
         res.status(500).send('el producto no se pudo guardar')
     })
 
+
     
 }
 
 //Obtener productos
 function getProduct(req, res) {
-    const id = req.query.id
-    const idParams = req.params.idEnElPath
+    const id = req.params.id
+
     if(!id){
         return res.status(400).send({
             msg: 'Es necesario que mande un ID'
@@ -53,50 +56,75 @@ function getProduct(req, res) {
     }
 
 
-Product.findById(id).then((product) => {
-    if(!product){
-        return res.status(400).send({
+    Product.findById(id).then((product) => {
+
+        if(!product){
+            return res.status(404).send({
             msg:'No se encontro el producto'
         })
     }
-})
+    return res.status(200).send({
+        msg:'Producto encontrado', 
+        product
+    })
 
+    }).catch((error) => {
+        console.log(error)
+        return res.status(500).send({
+            msg: 'Error al obtener producto'
+        })
+    })
 
-return res.status(200).send({
-    msg:'producto encontrado', 
-    product
-})
+    
 
+}
 
 //Eliminar producto
-}
+
 function deleteProduct(req,res) {
+
+    const id = req.params.id
     
-    res.status(200).send('prodcuto borrado');
+    Product.findByIdAndDelete(id).then((deleted)=> {
+        if(!deleted) {
+            return res.status(404).send("Error al borrar producto")
+        }
+        return res.status(200).send({
+            msg: "Producto borrado correctamente",
+            deleted
+        });
+
+    }).catch(error=> {
+        console.log(error);
+        return res.status(500).send("Error al borrar producto")
+    })
+
+    console.log(req.params)
 
 }
 
 //Actualizar producto
-async function updateProduct(req, rest) {
+async function updateProduct(req, res) {
     try {
-    const id = req.query.id;
-    const data = req.body
+        const id = req.query.id;
+        const data = req.body
 
-    const newProcuct = await Product.findByIdAndUpdate(id, data, {new: true} )
-    if(!newProcuct) {
+    const newProduct = await Product.
+    findByIdAndUpdate(id, data, {new: true})
+
+    if(!newProduct) {
         return res.status(404).send({
-            msg:'producto no se actualizo',
-            newProcuct: newProcuct
+            msg:'Producto no se actualizo',
         })
     }
     return res.status(200).send({
-        msg:'producto actualizado',
-        newProcuct: newProcuct
+        msg:'Producto actualizado',
+        newProduct: newProduct
     })
 } catch (error){
     console.log(error);
     return res.status(500).send({
-        msg:'no se pudo actualizar el producto'
+        msg:'No se pudo actualizar el producto'
     })
 }
 }
