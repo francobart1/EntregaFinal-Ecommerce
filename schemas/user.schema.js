@@ -13,7 +13,7 @@ const UserSchema = new Schema ({
         index: true,
         validate: {
             validator: function(value) {
-                return /^[\w-.]+@([\w-]+.)+[\w-]{2,4}$/  
+                return /^[\w-.]+@([\w-]+.)+[\w-]{2,4}$/.test(value)  
                 
             },
             message: props => `${props.value} no es un mail valido`

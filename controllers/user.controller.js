@@ -3,6 +3,7 @@ const User = require('../schemas/user.schema');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 const secret = process.env.JWT_SECRET;
 
 
@@ -43,19 +44,23 @@ async function postUser(req, res) {
 const login = async(req, res) => {
 
     try {
-
+        //email y password
     const emailLogin = req.body.email;
     const passwordLogin = req.body.password;
 
+    //checkeo que me hayan enviado todos los datos requeridos para el login
     if(!emailLogin || !passwordLogin) {
         return res.status(400).send({ msg: `Datos del login incompletos`})
     }
+
+    //buscar si existe un usuario con dicho email
     const user = await User.findOne({email: emailLogin})
 
     if(!user) {
         return res.status(404).send({msg: `Datos de ingresos incorrectos`})
     }
 
+    //comprobamos si el usuario obtenido en su propiedad password coincide con el password que me envia el usuario en el login
     const result = await bcrypt.compare(passwordLogin, user.password);
 
     if(!result) {
@@ -64,7 +69,8 @@ const login = async(req, res) => {
 
     user.password = undefined;
 
-    const token = jwt.sign(user.toJSON(), secret);
+    const token = jwt.sign(JSON.stringify(user), secret);
+
     console.log(token)
 
     return res.status(200).send({
@@ -91,7 +97,7 @@ async function getUser(req, res) {
 
     const id = req.params.id;
 
-    if(req.user.role !== 'ADMIN_ROLE' && req.user._id !== id) {
+    if(req.user.role !== 'ADMIN_ROLE' && req.user.id !== id) {
 
         return responseCreator(res, 401, "No puede obtener este usuario")
     }
@@ -113,6 +119,7 @@ async function getUser(req, res) {
     }
 }
 
+//obtener todos los usuarios
 async function getAllUsers(req, res) {
     try {
         const users = await User.find();
@@ -133,6 +140,7 @@ async function getAllUsers(req, res) {
     
 }
 
+//eliminar usuario
 async function deleteUser(req, res) {
     try {
     const id = req.params.id;
@@ -149,13 +157,10 @@ async function deleteUser(req, res) {
     }
 }
 
+//modificar usuario
 async function updateUser(req, res) {
     try {
         const id = req.params.id;
-
-        if (id !== req.user.id) {
-            return responseCreator(res, 401, 'No puede modificar este usuario');
-        }
         const data = req.body;
 
         data.password = undefined;
@@ -177,7 +182,9 @@ async function updateUser(req, res) {
 async function updatePassword(req, res) {
     try {
         const id = req.params.id;
+
         const oldPassword = req.body.oldPassword
+
         let newPassword = req.body.newPassword
 
         const user = await User.findById(id);
