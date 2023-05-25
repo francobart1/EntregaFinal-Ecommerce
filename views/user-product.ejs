@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>DATATECH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="shortcut icon" href="/assets/images/logo-smartphone.svg.png">
+
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <a href="/index.html" class="navbar__nav-link">
+                <img class="navbar__logo" src="/assets/images/logo-smartphone.svg.png" alt="Logo del ecommerce">
+            </a>
+            <div class="user-navbar">
+                <div class="user-navbar__cart-icon-container">
+                    <a href="/order">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <div class="user-navbar__cart-badge" id="cart-count">0
+
+                    </div>
+                    </a>
+                </div>
+                <div class="user-navbar__user-avatar-container">
+                    <a href="#">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/50px-Default_pfp.svg.png" class="user-navbar__user-avatar" alt="Imagen de usuario">
+                    </a>
+                </div>
+                <!-- TODO: avatar de la persona logueada o nombre -->
+            </div>
+            
+            <input type="checkbox" class="navbar__menu-btn" id="menu-btn">
+
+            <label for="menu-btn" class="navbar__menu-label">
+                <span class="navbar__menu-icon"></span>
+            </label>
+
+
+            <ul class="navbar__nav-links-container">
+                <li class="navbar__nav-item">
+                    <a href="/" class="navbar__nav-link">Inicio</a>
+                </li>
+                <li class="navbar__nav-item">
+                    <a href="/contact" class="navbar__nav-link">Contacto</a>
+                </li>
+                <li class="navbar__nav-item">
+                    <a href="/about-us" class="navbar__nav-link">Nosotros</a>
+                </li>
+                <li class="navbar__nav-item">
+                    <a href="/register" class="navbar__nav-link">Registro</a>
+                </li>
+                <li class="navbar__nav-item" id="sign-in">
+                    <a href="/login"  class="navbar__nav-link">Login</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <h1 class="title-product">User Product</h1>
+    <div class="container-product">
+        
+        <form id="add-product" class="product-form" onsubmit="addProduct(event)"> 
+
+        
+            <div class="input-box">
+                <label class="label-product" for="nameLabel">Usuario</label>
+                <input class="input-product" type="text" name="name" id="nameLabel" required>
+                
+            </div>
+            <div class="input-box">
+                <label class="label-product" for="descLabel">Email</label>
+                <input type="email" class="input-product" name="email" id="descLabel" rows="5" required></input>
+            </div>
+
+            <div class="input-box">
+                <label class="label-product" for="categoryLabel">role</label>
+                <select name="role" id="categorias">
+                    <option value="" selected></option>
+                    <option value="cliente">client-user</option>
+                    <option value="admin">admin-user</option>
+                </select>
+            </div>
+            
+            
+            
+            <button type="submit" class="submit-btn" id="submit-btn">Cargar Usuario</button>
+        </form>
+        <div class="table-container">
+            <table class="table-product">
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Creado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="footer__column">
+            <ul class="footer__contact-container">
+                <li class="footer__contact-item"> 
+                    <a href="https://www.facebook.com/" class="footer__contact-link">
+                        <i class="fa-brands fa-facebook footer__contact-icon footer__contact-icon--facebook"></i>
+                        Facebook
+                    </a>
+                </li>
+                <li class="footer__contact-item">
+                    <a href="https://www.instagram.com/?hl=es-la" class="footer__contact-link">
+                        <i class="fa-brands fa-instagram 
+                        footer__contact-icon
+                        footer__contact-icon--instagram"></i>
+                        Instagram
+                    </a>
+                </li>
+                <li class="footer__contact-item">
+                    <a href="https://ar.linkedin.com/" class="footer__contact-link">
+                        <i class="fa-brands fa-linkedin 
+                        footer__contact-icon
+                        footer__contact-icon--linkedin"></i>
+                        LinkedIn
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="footer__column">
+            <img src="/assets/images/logo-smartphone.svg.png" alt="Company Logo" class="footer__logo" width="50">
+            <h2 class="footer__company-name" style="color: white;">
+                DATATECH
+            </h2>
+            <p class="footer__copyrigth" style="color: white;">
+                Todos los derechos reservados a DATATECH
+            </p>
+        </div>
+        <div class="footer__column">
+            <ul class="footer__contact-container">
+                <li class="footer__contact-item">
+                    <a href="#" class="footer__contact-link">
+                        <i class="fa-solid fa-square-phone-flip footer__contact-icon"></i>
+                        Teléfono
+                    </a>
+                </li>
+                <li class="footer__contact-item">
+                    <a href="#" class="footer__contact-link">
+                        <i class="fa-solid fa-location-dot footer__contact-icon"></i>
+                        Localización
+                    </a>
+                </li>
+                <li class="footer__contact-item">
+                    <a href="#" class="footer__contact-link">
+                        <i class="fa-solid fa-envelope footer__contact-icon"></i>
+                        Email
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </footer>
+
+    <!-- ?  Librerias -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script src="/js/header.js"></script>
+    <script src="/js/admin-user.js"></script>
+    
+</body>
+</html>

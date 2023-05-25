@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="shortcut icon" href="/assets/images/logo-smartphone.svg.png">
+    <title>DATATECH</title>
+</head>
+<body>
+        <header class="header">
+            <nav class="navbar">
+                <a href="/index.html" class="navbar__nav-link">
+                    <img class="navbar__logo" src="/assets/images/logo-smartphone.svg.png" alt="Logo del ecommerce">
+                </a>
+                <div class="user-navbar">
+                    <div class="user-navbar__cart-icon-container">
+                        <a href="/order">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <div class="user-navbar__cart-badge" id="cart-count">0
+    
+                        </div>
+                        </a>
+                    </div>
+                    <div class="user-navbar__user-avatar-container">
+                        <a href="#">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/50px-Default_pfp.svg.png" class="user-navbar__user-avatar" alt="Imagen de usuario">
+                        </a>
+                    </div>
+                    <!-- TODO: avatar de la persona logueada o nombre -->
+                </div>
+                
+                <input type="checkbox" class="navbar__menu-btn" id="menu-btn">
+    
+                <label for="menu-btn" class="navbar__menu-label">
+                    <span class="navbar__menu-icon"></span>
+                </label>
+    
+    
+                <ul class="navbar__nav-links-container">
+                    <li class="navbar__nav-item">
+                        <a href="/" class="navbar__nav-link">Inicio</a>
+                    </li>
+                    <li class="navbar__nav-item">
+                        <a href="/contact" class="navbar__nav-link">Contacto</a>
+                    </li>
+                    <li class="navbar__nav-item">
+                        <a href="/about-us" class="navbar__nav-link">Nosotros</a>
+                    </li>
+                    <li class="navbar__nav-item">
+                        <a href="/register" class="navbar__nav-link">Registro</a>
+                    </li>
+                    <li class="navbar__nav-item" id="sign-in">
+                        <a href="/login"  class="navbar__nav-link">Login</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <main class="main-about-us">
+            <div class="container-about-us">
+                <section class="container-about-us__container-information">
+                    <div class="container-about-us__header-information">
+                        <h1 class="container-about-us__title-information">Sobre Nosotros</h1>
+                    </div>
+                    <div class="container-about-us__body-information">
+                        <p class="container-about-us__description-information">
+                            Somos una empresa que empezó en la pandemia, una epoca muy difícil para los emprendedores. Lo que nos motivó a llevar a cabo nuestra idea fue el simple hecho que ningún distribuidor de aparatos electrónicos dejaba insatisfecho al cliente ya sea por el incremento de precios, la falta de stock y lo más importante la confianza empresa-cliente al no cumplir el tiempo estimado de entrega y no ofrecer garantía en sus productos.
+                            <h3 class="container-about-us__subtitle">Por qué confiar en nosotros?</h3>
+                            <ul class="container-about-us__list">
+                                <li class="container-about-us__list-item">Traemos nosotros mismos los productos nuevos y en caja sellada  desde el exterior.</li>
+                                <li class="container-about-us__list-item">Ofrecemos la garantía del fabricante y además ofrecemos nuestra propia garantía.</li>
+                                <li class="container-about-us__list-item">Tu producto llega en menos de una semana a tu casa y <strong style="color: rgba(255, 166, 0, 0.774);"> GRATIS!!</strong></li>
+                                <li class="container-about-us__list-item">Más de 500 locales por toda Argentina.</li>
+                            </ul>
+                        </p>
+                    </div>
+                    
+                </section>
+                <section class="container-about-us__container-img">
+                    <img class="container-about-us__img" src="/assets/images/respdibujo.png" alt="imagen ilustrativa">
+                </section>
+            </div>
+        </main>
+        <div class="whatsapp-container">
+            <a href="" target="_blank" class="whatsapp-container__link">
+                <i class="fa-brands fa-whatsapp"></i>
+            </a>
+        </div>
+        <footer class="footer">
+            <div class="footer__column">
+                <ul class="footer__contact-container">
+                    <li class="footer__contact-item"> 
+                        <a href="#" class="footer__contact-link">
+                            <i class="fa-brands fa-facebook footer__contact-icon footer__contact-icon--facebook"></i>
+                            Facebook
+                        </a>
+                    </li>
+                    <li class="footer__contact-item">
+                        <a href="#" class="footer__contact-link">
+                            <i class="fa-brands fa-instagram 
+                            footer__contact-icon
+                            footer__contact-icon--instagram"></i>
+                            Instagram
+                        </a>
+                    </li>
+                    <li class="footer__contact-item">
+                        <a href="#" class="footer__contact-link">
+                            <i class="fa-brands fa-linkedin 
+                            footer__contact-icon
+                            footer__contact-icon--linkedin"></i>
+                            LinkedIn
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="footer__column">
+                <img src="/assets/images/logo-smartphone.svg.png" alt="Company Logo" class="footer__logo" width="50">
+                <h2 class="footer__company-name" style="color: white;">
+                    DATATECH
+                </h2>
+                <p class="footer__copyrigth" style="color: white;" >
+                    Todos los derechos reservados a DATATECH
+                </p>
+            </div>
+            <div class="footer__column">
+                <ul class="footer__contact-container">
+                    <li class="footer__contact-item">
+                        <a href="#" class="footer__contact-link">
+                            <i class="fa-solid fa-square-phone-flip footer__contact-icon"></i>
+                            Teléfono
+                        </a>
+                    </li>
+                    <li class="footer__contact-item">
+                        <a href="#" class="footer__contact-link">
+                            <i class="fa-solid fa-location-dot footer__contact-icon"></i>
+                            Localización
+                        </a>
+                    </li>
+                    <li class="footer__contact-item">
+                        <a href="#" class="footer__contact-link">
+                            <i class="fa-solid fa-envelope footer__contact-icon"></i>
+                            Email
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </footer>
+
+</body>
+</html>

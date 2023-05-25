@@ -19,27 +19,27 @@ return responseCreator(res, 200, 'Productos obtenidos correctamente', {productos
 
 
 //Agregar Producto
-function addProduct(req, res){
-
-    const product = new Product(req.body);
-    console.log(product)
-
-
-    product.save()
-                .then(function(product){
-
-            return res.status(200).send({
-                msg: 'Producto guardado corractamente',
-                product
+async function addProduct(req, res){
+    console.log(req.body)
+    console.log(req.file)
+    console.log(req.image)
+    try{
+        const product = new Product(req.body);
+        product.image = req.image;
+        await product.save();
+        
+        return res.status(200).send({
+            ok:true,
+            msg: "Producto agregado correctamente",
+            product
         })
-
-
-
-
-    }).catch(error => {
-        console.log(error);
-        res.status(500).send('el producto no se pudo guardar')
-    })
+    } catch(error) {
+        return res.status(500).send({
+            ok: false,
+            msg: 'no se agrego el producto',
+            error
+        })
+    }
 
 
     

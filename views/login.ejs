@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <title>DATATECH</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="/css/main.css">
+        <link rel="shortcut icon" href="/assets/images/logo-smartphone.svg.png">
+    
+    </head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <a href="/index.html" class="navbar__nav-link">
+                <img class="navbar__logo" src="/assets/images/logo-smartphone.svg.png" alt="Logo del ecommerce">
+            </a>
+            <div class="user-navbar">
+                <div class="user-navbar__cart-icon-container">
+                    <a href="/order">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <div class="user-navbar__cart-badge" id="cart-count">0
+
+                    </div>
+                    </a>
+                </div>
+                <div class="user-navbar__user-avatar-container">
+                    <a href="#">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/50px-Default_pfp.svg.png" class="user-navbar__user-avatar" alt="Imagen de usuario">
+                    </a>
+                </div>
+                <!-- TODO: avatar de la persona logueada o nombre -->
+            </div>
+            
+            <input type="checkbox" class="navbar__menu-btn" id="menu-btn">
+
+            <label for="menu-btn" class="navbar__menu-label">
+                <span class="navbar__menu-icon"></span>
+            </label>
+
+
+            <ul class="navbar__nav-links-container">
+                <li class="navbar__nav-item">
+                    <a href="/" class="navbar__nav-link">Inicio</a>
+                </li>
+                <li class="navbar__nav-item">
+                    <a href="/contact" class="navbar__nav-link">Contacto</a>
+                </li>
+                <li class="navbar__nav-item">
+                    <a href="/about-us" class="navbar__nav-link">Nosotros</a>
+                </li>
+                <li class="navbar__nav-item">
+                    <a href="/register" class="navbar__nav-link">Registro</a>
+                </li>
+                <li class="navbar__nav-item" id="sign-in">
+                    <a href="/login"  class="navbar__nav-link">Login</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <div class="login-container">
+        <h1 class="login-container__title-login">LOGIN</h1>
+        <form id="loginForm" class="login-container__login-form">
+            <div class="login-container__input-group">
+                <label class="form__usuario__label" for="email">Email:</label>
+                <input class="input" type="email" name="email" placeholder="example@email.com" required minlength="8" maxlength="30" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+            </div>
+            <div class="login-container__input-group">
+                <label class="form__usuario__label" for="password">Contraseña:</label>
+                <input class="input" type="password"  required minlength="8" maxlength="20" id="password" name="password">
+            </div>
+
+            <button type="submit" class="login-container__btn-login">Ingresar</button>
+        </form>
+    </div>
+    <script src="/js/header.js"></script>
+    <script src="/js/order.js"></script>
+    <script src="/js/alert.js"></script>
+    <script src="/js/login.js"></script>
+    
+    
+</body>
+</html>
