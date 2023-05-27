@@ -1,0 +1,92 @@
+
+.titulo-form {
+    text-align: center;
+    margin-top: 10px;
+    padding: 15px;
+    color: $color-bg-secondary;
+}
+.main {
+    margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.formRegistroUsuario {
+    width: auto;
+    margin: 20px ;
+}
+.form {
+    width: 100%;
+    box-shadow: 1px 1px 5px gray;
+    background-color: #e6ac1a;
+    border-radius: 10px;
+    padding: 30px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: .7s ease-in-out;
+    &__:hover {
+        border: 4px solid #5BC0F8;
+    }
+    &__usuario {
+        width: 100%;
+        padding: 5px 15px;
+        &__label {
+            padding-bottom: 4px;
+            display: flex;
+            color: white;
+            &__genero {
+                padding: 0 10px;
+                color: white;
+            }
+        }
+    }
+}
+
+.terminos, .botonEnviar {
+    width: 100%;
+    padding: 5px 15px;
+}
+
+.terms {
+    color: white;
+}
+
+.gen-container {
+    display: flex;
+    flex-direction: row;
+}
+.radio {
+    margin: 0 5px;
+}
+.input, #country {
+    box-shadow: 1px 1px 10px gray;
+    padding: 0 10px;
+    width: 100%;
+    border-radius: 5px;
+    height: 30px;
+    border: none;
+}
+.botonEnviar {
+    width: 100%;
+    height: 40px;
+    
+}
+.btn-form {
+    border: none;
+    color: #0081C9;
+    font-weight: 600;
+    border-radius: 10px;
+    width: 75px;
+    height: 100%;
+    transition: .2s ease-in-out;
+    cursor: pointer;
+}
+.btn-form:hover {
+    color: white;
+    background-color: #0081C9;
+}
+
