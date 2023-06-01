@@ -1,6 +1,9 @@
+const axios = require('axios').default
+let Products =  []; 
+const token = localStorage.getItem('token')
 
-let Products = JSON.parse(localStorage.getItem("Products")) || []; 
-
+const URL = 'http://localhost:8000/api';
+const URL_public = 'http://localhost:8000';
 
 const productForm = document.getElementById('add-product')
 
@@ -8,7 +11,22 @@ productForm.addEventListener('click', () => {
     console.dir(productForm.dataset) 
 });
 
+async function CargarProductos() {
 
+    try {
+
+        const { data } = await axios.get(`${URL}/products`);
+        
+        Products = data.productos;
+        renderizarTabla();
+
+    } catch (error) {
+        console.log(error);
+
+    }
+}
+
+CargarProductos();
 
 const submitBtn = document.getElementById('submit-btn') //?   #4
 
@@ -21,26 +39,27 @@ const tableBody = document.getElementById('table-body')
 let editIndex; //?      #3
 
 
-function renderizarTabla(){
+function renderizarTabla(arrayProductos){
     
     tableBody.innerHTML = ""; 
 
-    if(Products.length === 0){
+    if(arrayProductos.length === 0){
         tableBody.innerHTML = `<tr class="disabled"><td colspan="6">NO SE ENCONTRARON PRODUCTOS</td></tr>`; 
 
         return
     }
-    Products.forEach((producto, index) =>{    
-        let imageSrc = '/assets/images/no-product.png'; 
+    arrayProductos.forEach((producto, index) =>{    
+        //let imageSrc = '/assets/no-product.png'; 
 
-        if(producto.image){ 
-            imageSrc = producto.image;       
-        }
+        //if(producto.image){ 
+        //    imageSrc = producto.image;       
+        //}
+        let imageSrc = producto.image ? `${URL_public}/upload/product/ ${producto.image}` : '/assets/no-product.png';
 
         const tableRow = `
                             <tr class="product">
                                 <td class="product__img-cell">
-                                    <img class= "product__img" src="${imageSrc}" width="120px" alt="${producto.name}">                    
+                                    <img class= "product__img" src="${producto.image ? URL+'/'+Products.image : '/assets/no-product.png'}" width="120px" alt="${producto.name}">                    
                                 </td>
                                 <td class= "product__name">
                                     ${producto.name}
@@ -53,7 +72,7 @@ function renderizarTabla(){
                                 </td>
                                 
                                 <td class= "product__actions">
-                                    <button class="product__action-btn" onclick="deleteProduct(${index})"> 
+                                    <button class="product__action-btn" onclick="deleteProduct('${producto._id}')"> 
                                         <i class="fa-solid fa-trash-can"></i>
                                     </button>
                                     <button class="product__action-btn btn-edit" onclick="editProduct(${index})">
@@ -71,10 +90,9 @@ function renderizarTabla(){
 }
 
 
-renderizarTabla()
 
 
-function addProduct(evt){
+async function addProduct(evt){
     evt.preventDefault(); 
 
     console.dir(evt.target); 
@@ -84,18 +102,19 @@ function addProduct(evt){
     const elements = evt.target.elements
 
 
-    const newProduct = {
-        name: elements.name.value,
-        description: elements.description.value,
-        price: elements.price.valueAsNumber, 
-        image: elements.image.value,
-        category: elements.categorias.value
-    };
     
 
     const newFormData = new FormData(evt.target);
-    
+    //observar q tengo
     const newProductFormData = Object.fromEntries(newFormData); 
+
+    const { data } = await axios.post(`${URL}/product`, newFormData, {
+        headers: {
+            Authorization: token
+        }
+    })
+
+    console.log(data)
 
 
     newProductFormData.price = +newProductFormData.price; 
@@ -135,6 +154,7 @@ function addProduct(evt){
 }
 
 function deleteProduct(id){
+    
     swal({
         title: `Borrar Producto`,
         text: `Esta seguro que desea borrar el producto ${Products[id].name}`,
@@ -143,11 +163,20 @@ function deleteProduct(id){
             cancel: `Cancelar`,
             delete: `Borrar`
         }
-    }).then(value => {
+    }).then(async function (value) {
         if(value === `delete`){
-            Products.splice(id, 1)
             
-            localStorage.setItem("Products", JSON.stringify(Products));
+            // llamda al backend axios.delete
+            try {
+            const productDeleted = await  axios.delete(`${URL}/product/${id}`)
+            CargarProductos()
+                swal({
+                    text: `Se borre el producto  ${productDeleted.name} correctamente`
+                })
+            }catch (error) {
+                console.log(error)
+            }
+            
         
             swal({
                 title: `Elemento Borrado Correctamente`,
@@ -155,8 +184,7 @@ function deleteProduct(id){
             })
         
             renderizarTabla();    
-        }else{
-            return; 
+        
         }
     })
 
@@ -182,6 +210,8 @@ function editProduct(id){           //?     #3
     
 
     editIndex = id; 
+
+    //mandar el objeto al bakend al endpoint de hacer put, una vez resuelto,vuelven a pedir los productos
 }
 
 

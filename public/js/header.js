@@ -27,7 +27,7 @@ if(currentUser) {
 
 
 
-    signIn.innerHTML = `<a href="/pages/login/login.html" id="sign-in" class="navbar__nav-link">Login</a>`
+    signIn.innerHTML = `<a href="/login" id="sign-in" class="navbar__nav-link">Login</a>`
 }
 
 }
@@ -46,7 +46,7 @@ function  createLinkElement(path, text) {
     
     const link = document.createElement('a');
     link.classList.add('navbar__nav-link');
-    link.href = `/pages/${path}/${path}.html`;
+    link.href = `/views/${path}/${path}.ejs`;
     link.innerHTML = text;
     
     return link;

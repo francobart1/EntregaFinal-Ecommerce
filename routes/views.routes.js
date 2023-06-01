@@ -8,7 +8,7 @@ api.get('/', (req, res) => res.render('index'));
 
 api.get('/contact', (req, res) => res.render('contact'));
 
-api.get('/about-us', (req, res) => res.render('abouts-us'));
+api.get('/about-us', (req, res) => res.render('about-us'));
 
 api.get('/admin-product', (req, res) => res.render('admin-product'));
 
