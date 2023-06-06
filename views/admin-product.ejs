@@ -79,15 +79,7 @@
                 <label class="label-product" for="priceLabel">Precio</label>
                 <input class="input-product" type="number" name="price" id="priceLabel" required>
             </div>
-            <div class="input-box">
-                <label class="label-product" for="categoryLabel">Categoria</label>
-                <select name="category" id="categorias">
-                    <option value="" selected></option>
-                    <option value="ofertas">Ofertas</option>
-                    <option value="celulares">Celulares</option>
-                    <option value="accesorios">Accesorios</option>
-                </select>
-            </div>
+            
             <div class="input-box">
                 <label class="label-product" for="imgLabel">Imagen</label>
                 <input class="input-product" type="url" name="file" id="imgLabel" required
@@ -144,7 +136,7 @@
             </ul>
         </div>
         <div class="footer__column">
-            <img src="/assets/images/logo-smartphone.svg.png" alt="Company Logo" class="footer__logo" width="50">
+            <img src="/assets/logo-smartphone.svg.png" alt="Company Logo" class="footer__logo" width="50">
             <h2 class="footer__company-name" style="color: white;">
                 DATATECH
             </h2>
@@ -177,6 +169,7 @@
     </footer>
 
     <!-- ?  Librerias -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <script src="/js/header.js"></script>

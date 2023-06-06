@@ -1,9 +1,18 @@
-const user = JSON.parse(localStorage.getItem('currentUser'));
+const URL = 'http://localhost:9000/api';
 const cardContainer = document.querySelector('#card-container');
+let Products = [];
 
+async function cargarProductos(){
+    try {
+        const respuesta = await axios.get(`${URL}/products`)
+        Products = respuesta.data.productos
+        renderizarProductos(Products)
+        
+    } catch (error) {
+        console.log(error)
+    }
+}
 
-const productsLS = JSON.parse(localStorage.getItem('Products')) || [];
-console.log(productsLS);
 
 function renderizarProductos(products) {
     cardContainer.innerHTML = '';
@@ -29,12 +38,12 @@ function renderizarProductos(products) {
             </div>
         </div>
         <div class="card__footer">
-        <a class="card__btn" onclick="addToOrder(${index})" ${user ? "" : "disabled"} >
+        <a class="card__btn" onclick="addToOrder(${product._id})" >
         Comprar
         </a>
         
         <div class="card__btn-container">
-            <a class="card__btn" href="/pages/product-detail/product-detail.html?id=${index}">
+            <a class="card__btn" href="/product-detail?id=${product._id}">
                 Detalle
             </a>
         </div>
@@ -47,6 +56,8 @@ function renderizarProductos(products) {
     
     
 }
+cargarProductos();
+
 function addToOrder(id){
     const product = productsLS[id];
         

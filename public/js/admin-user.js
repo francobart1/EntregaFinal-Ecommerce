@@ -1,25 +1,44 @@
-let users = JSON.parse(localStorage.getItem("users")) || []; 
+let Users = [];
+let editIndex = undefined;
+let pass1Input = document.getElementById('password1'); 
+let pass2Input = document.getElementById('password2'); 
+const passForm = document.querySelectorAll('.password-form');
 
 
-
-const productForm = document.getElementById('add-product')
-productForm.addEventListener('click', () => {
-    console.dir(productForm.dataset) 
-}) 
+const URL = 'http://localhost:9000/api';
 
 
-const submitBtn = document.getElementById('submit-btn') //?   #4
+async function cargarUsuarios() {
+    try {
+        const token = localStorage.getItem("token") 
+        const response = await axios.get(`${URL}/users`, { 
+            headers: {
+                Authorization: token
+            }
+        });
+        
+        Users=response.data.user;
+        
+        renderizarTablaUsuario(Users);
+
+    } catch (error) {
+        console.log(error);
+       
+    }
+
+}
+cargarUsuarios();
 
 
-
-
+const userForm = document.getElementById('user-form')
+const submitBtn = document.getElementById('submit-btn')
 const tableBody = document.getElementById('table-body')
 
 
-let editIndex; //?      #3
 
 
-function renderizarTabla(){
+
+function renderizarTablaUsuario(users){
     
     tableBody.innerHTML = ""; 
 
@@ -28,18 +47,14 @@ function renderizarTabla(){
 
         return
     }
-    users.forEach((user, index) =>{    
-        let imageSrc = '/assets/images/no-product.png'; 
-
-        if(user.image){ 
-            imageSrc = user.image;       
-        }
+    users.forEach((user) =>{    
+        
 
         const tableRow = `
                             <tr class="product">
                             
                                 <td class= "product__name">
-                                    ${user.name}
+                                    ${user.fullName}
                                 </td>
                                 <td class= "product__desc">
                                     ${user.email}    
@@ -51,10 +66,10 @@ function renderizarTabla(){
                                     ${user.date}
                                 </td>
                                 <td class= "product__actions">
-                                    <button class="product__action-btn" onclick="deleteProduct(${index})"> 
+                                    <button class="product__action-btn" onclick="deleteUser('${user._id}')"> 
                                         <i class="fa-solid fa-trash-can"></i>
                                     </button>
-                                    <button class="product__action-btn btn-edit" onclick="editProduct(${index})">
+                                    <button class="product__action-btn btn-edit" onclick="editUser('${user._id}')">
                                         <i class="fa-solid fa-pencil"></i>
                                     
                                 </td>
@@ -68,7 +83,7 @@ function renderizarTabla(){
 }
 
 
-renderizarTabla()
+
 
 
 function formatearFecha() {
@@ -88,107 +103,128 @@ if(dia < 10) {
     return `${dia}/${mes}/${year}`;
 }
 
-function addProduct(evt){
-    evt.preventDefault(); 
 
-    console.dir(evt.target); 
-
-    console.log(evt.target);
-
-    const elements = evt.target.elements
-
-
-    const newProduct = {
-        name: elements.name.value,
-        email: elements.email.value,
-        role: elements.role.value,
-        date: formatearFecha()
-    };
+//Funcion para agregar un nuevo usuario a la tabla
+async function addUser(evt){
+    evt.preventDefault();
+    const elements = evt.target.elements;
 
     
+    
+    const newUser = {
+        fullName: elements.fullName.value,
+        email: elements.email.value,
+        password: elements.password1.value,
+        role: elements.role.value
+    }
+    const token = localStorage.getItem('token');
 
-
-    console.log(newProduct)
-
-    if(editIndex >= 0){
-        users[editIndex] = newProduct;
-        swal({
-            title: `El producto se edito correctamente`,
-            icon: 'info'
+    if (editIndex) {
+    const response = await axios.put(`${URL}/users/${editIndex}`,newUser,{
+        headers: { Authorization: token } }); 
+        if(!response)
+        showAlert('No se pudo modificar el Usuario','error')
+        else{    
+        showAlert('El usuario fue modificado','exito')
+        passForm.forEach((form)=>{
+            form.style.display = 'block';
         })
-    } else{
-        users.push(newProduct)
+        pass1Input.required = true;
+        pass2Input.required = true;
+        }
+    }else {
+        const response = await axios.post(`${URL}/user`,newUser,{
+            'Content-Type': 'application/json'
 
-        swal({
-            title: `El producto se agrego correctamente`,
-            icon: 'success'
-        })
+        });  
+        if(!response)
+        showAlert('No se pudo agregar el Usuario','error')
+        else      
+        showAlert('El usuario se Agrego Correctamente','exito')
     }
 
-    
-    localStorage.setItem("users",  JSON.stringify(users)) 
 
-    editIndex = undefined 
 
-    submitBtn.classList.remove('edit-btn') 
-    submitBtn.innerText = 'Cargar Producto'
+editIndex = undefined;
+submitBtn.classList.remove('edit-btn');
+submitBtn.innerText = 'Cargar'
 
-    console.log(users)
+cargarUsuarios();
+limpiar();
 
-    renderizarTabla()
-
-    evt.target.reset() 
-
-    elements.name.focus(); 
 }
 
-function deleteProduct(id){
+function limpiar(){
+    const el = userForm.elements;
+    
+    el.fullName.value = '';
+    el.email.value = '';
+    el.password1.value = '';
+    el.password2.value = ''; 
+    el.date.value = '';
+    el.role.value = 'CLIENT_ROLE';
+   
+  }
+
+  async function deleteUser(id) {
     swal({
-        title: `Borrar usuario`,
-        text: `Esta seguro que desea borrar el usuario ${users[id].name}`,
+        title: `Borrar Usuario`,
+        text: `Esta seguro que desea borrar el usuario`,
         icon: 'warning',
         buttons: {
             cancel: `Cancelar`,
             delete: `Borrar`
         }
-    }).then(value => {
-        if(value === `delete`){
-            users.splice(id, 1)
+    }).then(async function (value) {
+        if (value === `delete`) {
             
-            localStorage.setItem("users", JSON.stringify(users));
-        
+            try {
+                const respuesta = await axios.delete(`${URL}/users/${id}`,{
+                    headers: { Authorization: token } });
+                cargarUsuarios()
+            } catch (error) {
+                console.log(error)
+            }
             swal({
-                title: `Elemento Borrado Correctamente`,
+                title: `Usuario borrado correctamente`,
                 icon: 'error'
             })
-        
-            renderizarTabla();    
-        }else{
-            return; 
+            renderizarTablaUsuario();
         }
     })
 
-    
 
 }
 
 
 
-function editProduct(id){           //?     #3
-
-    submitBtn.classList.add('edit-btn') 
-    submitBtn.innerText = 'Modificar Producto' 
-
-    let user = users[id];
-    console.table(product)
-    const el = productForm.elements;
-    el.name.value = user.name
-    el.email.value = user.email
-    el.role.value = user.role
+async function editUser(id){
+    try {
+    submitBtn.classList.add('admin-user__edit-btn');
+    submitBtn.innerText = 'Modificar'
+  
+    const token = localStorage.getItem('token');
+    response = await axios.get(`${URL}/user/${id}`,{
+        headers: {
+            Authorization: token
+        }
+    });  
+    const user = response.data.user;
+  
+    const el = userForm.elements;
+     
+    editIndex = id;
     
-
-    editIndex = id; 
-}
+  
+    el.fullName.value = user.fullName;
+    el.email.value = user.email;
+    el.role.value = user.role;
+  
+    } catch (error) {
+      console.log(error)
+    }
+      
+  }
 
 
 

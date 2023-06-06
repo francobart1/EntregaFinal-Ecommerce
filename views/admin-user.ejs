@@ -63,25 +63,36 @@
     <h1 class="title-product">User Product</h1>
     <div class="container-product">
         
-        <form id="add-product" class="product-form" onsubmit="addProduct(event)"> 
+        <form id="user-form" class="product-form" onsubmit="addUser(event)"> 
 
         
             <div class="input-box">
-                <label class="label-product" for="nameLabel">Usuario</label>
-                <input class="input-product" type="text" name="name" id="nameLabel" required>
+                <label class="label-product" for="nameLabel">Nombre Completo</label>
+                <input class="input-product" type="text" name="fullName" id="nameLabel" required>
                 
             </div>
             <div class="input-box">
                 <label class="label-product" for="descLabel">Email</label>
                 <input type="email" class="input-product" name="email" id="descLabel" rows="5" required></input>
             </div>
+            <div class="input-box password-form">
+                <label class="label-product" for="password1" >Contraseña</label><br>
+                <input type="password" name="password1" class="input-product" id="password1"  
+                required>
+            </div>
+            <div class="input-box password-form">
+                <label class="label-product" for="password2" >Repetir Contraseña</label><br>
+                <input type="password" class="input-product" name="password2" id="password2"  
+                
+                required>
+            </div> 
 
             <div class="input-box">
                 <label class="label-product" for="categoryLabel">role</label>
                 <select name="role" id="categorias">
                     <option value="" selected></option>
-                    <option value="cliente">client-user</option>
-                    <option value="admin">admin-user</option>
+                    <option value="CLIENT_ROLE">client-user</option>
+                    <option value="ADMIN_ROLE">admin-user</option>
                 </select>
             </div>
             
@@ -93,7 +104,7 @@
             <table class="table-product">
                 <thead>
                     <tr>
-                        <th>Usuario</th>
+                        <th>Nombre Completo</th>
                         <th>Email</th>
                         <th>Role</th>
                         <th>Creado</th>
@@ -134,7 +145,7 @@
             </ul>
         </div>
         <div class="footer__column">
-            <img src="/assets/images/logo-smartphone.svg.png" alt="Company Logo" class="footer__logo" width="50">
+            <img src="/assets/logo-smartphone.svg.png" alt="Company Logo" class="footer__logo" width="50">
             <h2 class="footer__company-name" style="color: white;">
                 DATATECH
             </h2>
@@ -168,7 +179,8 @@
 
     <!-- ?  Librerias -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> 
+    <script src="/js/alert.js"></script>
     <script src="/js/header.js"></script>
     <script src="/js/admin-user.js"></script>
     

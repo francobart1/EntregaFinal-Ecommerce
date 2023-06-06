@@ -34,6 +34,8 @@ const UserSchema = new Schema ({
     date: {type: String},
     image: {type: String},
     createdAt: {type: Date, default: Date.now},
+    country: {type: String},
+    gender: {type: String, minLenght: 3, maxLenght: 30},
 
 
 

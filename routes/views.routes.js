@@ -20,7 +20,7 @@ api.get('/product-detail', (req, res) => res.render('product-detail'));
 
 api.get('/register', (req, res) => res.render('register'));
 
-api.get('/user-product', (req, res) => res.render('/user-product'));
+api.get('/admin-user', (req, res) => res.render('admin-user'));
 
 
 

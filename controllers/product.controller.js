@@ -1,5 +1,7 @@
 const { responseCreator } = require('../utils/utils');
-const Product = require('../schemas/product.schema')
+const Product = require('../schemas/product.schema');
+const jwt = require('jsonwebtoken');
+const secret = process.env.JWT_SECRET;
 
 //Obtener todos los usuarios
 const getAllProducts = async (req, res) => {
@@ -21,11 +23,9 @@ return responseCreator(res, 200, 'Productos obtenidos correctamente', {productos
 //Agregar Producto
 async function addProduct(req, res){
     console.log(req.body)
-    console.log(req.file)
-    console.log(req.image)
     try{
         const product = new Product(req.body);
-        product.image = req.image;
+        //product.image = req.image;
         await product.save();
         
         return res.status(200).send({
@@ -46,87 +46,83 @@ async function addProduct(req, res){
 }
 
 //Obtener productos
-function getProduct(req, res) {
-    const id = req.params.id
-
-    if(!id){
+const getProduct = async (req,res) => {
+    console.log(req, res)
+    try {
+        const idParam = req.params.id;
+        if(!idParam){
         return res.status(400).send({
-            msg: 'Es necesario que mande un ID'
+        mgs:`Es necesario que mande ID`
         })
-    }
-
-
-    Product.findById(id).then((product) => {
-
+        }
+        const product = await Product.findById(idParam).populate('category');    
         if(!product){
             return res.status(404).send({
-            msg:'No se encontro el producto'
-        })
-    }
-    return res.status(200).send({
-        msg:'Producto encontrado', 
-        product
-    })
-
-    }).catch((error) => {
-        console.log(error)
-        return res.status(500).send({
-            msg: 'Error al obtener producto'
-        })
-    })
-
+                mgs:`No se encontro el producto`
+            })
+        }    
+        res.status(200).send({
+            msg: 'Producto encontrado',
+            product
+        });
     
-
+    } catch (error) {
+        return res.status(500).send({
+            msg: 'Error al obtener el producto'
+        });
+    }
+    
+    
 }
 
 //Eliminar producto
 
-function deleteProduct(req,res) {
-
-    const id = req.params.id
+const deleteProduct = async (req,res) => {
+    try {
+        const id = req.params.id;
+        const deleteProduct = await Product.findByIdAndDelete(id)
     
-    Product.findByIdAndDelete(id).then((deleted)=> {
-        if(!deleted) {
-            return res.status(404).send("Error al borrar producto")
-        }
+        if(!deleteProduct){
+            return res.status(404).send({mgr:'no se encontro el producto a borrar'});
+            }
+
         return res.status(200).send({
-            msg: "Producto borrado correctamente",
-            deleted
+            msg: 'Producto borrado correctamente',
+            deleteProduct
+        })
+    
+    }catch(error) {
+        return res.status(500).send({
+            msg: 'Error al borrar el producto'
         });
-
-    }).catch(error=> {
-        console.log(error);
-        return res.status(500).send("Error al borrar producto")
-    })
-
-    console.log(req.params)
-
+    }
 }
 
 //Actualizar producto
-async function updateProduct(req, res) {
+const updateProduct = async (req,res) => {
     try {
-        const id = req.query.id;
-        const data = req.body
-
-    const newProduct = await Product.
-    findByIdAndUpdate(id, data, {new: true})
-
-    if(!newProduct) {
+    const id = req.params.id;
+    const data = req.body
+    
+    const updateProduct =  await Product.findByIdAndUpdate(id,data,{new:true})
+    
+    if(!updateProduct){
         return res.status(404).send({
-            msg:'Producto no se actualizo',
+            msg:`El producto no se actualizo`
+        }) 
+    }
+
+    return res.status(200).send({
+            msg: 'Producto actualizado correctamente',
+            newProduct: updateProduct
+        })
+    
+    } catch(error)  {
+        console.log(error);
+        return res.status(500).send({
+            msg: `No se pudo actualizar el producto`
         })
     }
-    return res.status(200).send({
-        msg:'Producto actualizado',
-        newProduct: newProduct
-    })
-} catch (error){
-    console.log(error);
-    return res.status(500).send({
-        msg:'No se pudo actualizar el producto'
-    })
-}
 }
 module.exports = {
     updateProduct,

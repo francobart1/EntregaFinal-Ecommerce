@@ -1,34 +1,30 @@
-const  loginForm = document.getElementById('loginForm');
 
-loginForm.addEventListener('submit', (event) =>{
+const loginForm = document.getElementById('loginForm');
+const URL = 'http://localhost:9000/api';
+
+loginForm.addEventListener('submit',async (event) => {
     event.preventDefault();
-    console.dir(loginForm)
-    const { email, password } = loginForm.elements;
 
+    const {email,password} = loginForm.elements;
     
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-
-
-    const user = users.find((usr) =>{
-        if(usr.email === email.value) {
-            return true;
+    try {
+        const dataBody = {
+            email:email.value,
+            password: password.value
         }
-        return false
-    })
+        const respuesta = await axios.post(`${URL}/login`,dataBody)
 
-    if(!user || user.password !== password.value) {
-        showAlert('Datos ingresados no son correctos');
-        return;
-    }
+        const {token, user, msg} = respuesta.data;
 
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        //insertar alerta custom
-        showAlert('Login correcto te redireccionaremos en unos instantes...')
-    
+        localStorage.setItem('token', token);
+        localStorage.setItem('currentUser',JSON.stringify(user))
+
+        showAlert(msg)
         setTimeout(() => {
-            window.location.href = '/index.html';
-        }, 1500)
-
-    
-
-});
+                    window.location.href = '/';
+                }, 1500)
+    } catch (error) {
+        console.log(error)
+        showAlert('Error al hacel el Login','error')
+    }
+})

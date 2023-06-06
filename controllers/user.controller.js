@@ -8,36 +8,21 @@ const secret = process.env.JWT_SECRET;
 
 
 //crear usuario
-async function postUser(req, res) {
-
+async function postUser(req,res){
     try {
-        console.log(req.body);
-
-    const user = new User(req.body)
-    user.role = "CLIENT_ROLE";
-
-    //codificamos el password
-    const passwordHash = await bcrypt.hash(user.password, saltRounds)
-    user.password = passwordHash;
-
-    const newUser = await user.save()
-
-
-    console.log(user)
-
-    return res.status(201).send({
-        msg:`Usuario creado correctamente`,
-        user: newUser
-    });
-
-
-    } catch (error) {
-        console.log(error);
-        return res.status(500).send({
-            msg:`Error al crear usuario`,
+        const user = new User(req.body);
+        const passHash = await bcrypt.hash( user.password,saltRounds); 
+        user.password = passHash;
+        const newUser = await user.save();
+        return res.status(201).send({
+            msg:`Usuario creado correctamente`,
+            user: newUser
         })
+        
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('El usuario no se pudo guardar');
     }
-    
 }
 
 //Inicio
@@ -104,10 +89,11 @@ async function getUser(req, res) {
 
     
     try {
-        const user = await User.findById(id, {
-            __v: 0, 
+        const user = await User.findById(id, { 
             password: 0 });
-        if(!user) return responseCreator(res, 404, `No se encontro el usuario`);
+        if(!user) {
+            return responseCreator(res, 404, `No se encontro el usuario`)
+        }
 
         
 
@@ -120,24 +106,16 @@ async function getUser(req, res) {
 }
 
 //obtener todos los usuarios
-async function getAllUsers(req, res) {
+async function getAllUsers (req,res){
     try {
-        const users = await User.find();
-
-        if(!users) return res.status(404).send({ msg: `No se encontro usuarios`})
-
-        return responseCreator(res, 200, `Usuarios obtenidos correctamente`, { users });
-
-
-
-
+        const user = await User.find({ email: { $ne: "admin@gmail.com" } });
+        if(!user){
+            return res.status(404).send({msg:`No se encontraron del usuarios`})  
+        }
+        return responseCreator(res,200,'Ususarios obtenidos correctamente',{user})
     } catch (error) {
-        console.log(error);
-        return responseCreator(res, 500, `Error al encontrar usuarios`)
-
+        return res.status(500).send({msg: `Error al obtener usuarios`})
     }
-
-    
 }
 
 //eliminar usuario
@@ -146,7 +124,9 @@ async function deleteUser(req, res) {
     const id = req.params.id;
     const deletedUser = await User.findByIdAndDelete(id);
 
-    if(!deletedUser) return responseCreator(res, 404, `No se pudo eliminar el usuario`);
+    if(!deletedUser) {
+        return responseCreator(res, 404, `No se pudo eliminar el usuario`);
+        }
 
     return responseCreator(res, 200, `Usuario eliminado corractamente`, {deletedUser})
 
@@ -158,54 +138,56 @@ async function deleteUser(req, res) {
 }
 
 //modificar usuario
-async function updateUser(req, res) {
+async function updateUser(req,res){
+
     try {
         const id = req.params.id;
+
+        if(req.user.role !== 'ADMIN_ROLE' && id !== req.user._id){
+            return responseCreator(res,401,'No tiene permiso para modificar')
+        }
+
         const data = req.body;
-
         data.password = undefined;
-        
-        const updatedUser = await User.findByIdAndUpdate(id, data, { new: true} );
-
-        if(!updatedUser) return responseCreator(res, 404, `No se pudo actualizar`);
-
-        return responseCreator(res, 200, `Usuario actaulizado correctamente`, {updatedUser});
-
-
+        const updateUser = await User.findByIdAndUpdate(id,data,{new:true});
+        if(!updateUser){
+            return responseCreator(res,404,'No se encontro el usuario') 
+        }
+        return responseCreator(res,200,'Ususarios actualizado correctamente',{updateUser});
     } catch (error) {
-        console.log(error);
-        return responseCreator(res, 500, `Error al actualizar el usuario`)
+        return responseCreator(res,500,'error al actualizar el usuarios')
     }
+    
 }
 
 //actualizar password
-async function updatePassword(req, res) {
+async function updatePassword(req,res){
     try {
         const id = req.params.id;
-
-        const oldPassword = req.body.oldPassword
-
-        let newPassword = req.body.newPassword
-
+        const oldPassword = req.body.oldPassword;
+        const newPassword = req.body.newPassword;
         const user = await User.findById(id);
-
-        if(!user) return responseCreator(res, 404, `No se encontro el usuario`);
-
-        const pwdCompare = await bcrypt.compare(oldPassword, user.password);
-
-        if(!pwdCompare) return responseCreator(res, 401, `No se pudo modificar la contraseña.`);
-
-        newPassword = await bcrypt.hash(newPassword, saltRounds);
+        if(!user){
+            return responseCreator(res,404,'No se encontro el usuario') 
+        }
         
-        await User.findByIdAndUpdate(id, { password: newPassword});
-
-        return responseCreator(res, 200, `Password actualizado correctamente!`)
-
-
-    }catch (error) {
-        console.log(error);
-        return responseCreator(res, 500, `No se pude actualizar el usuario`)
+        const pwdCompare = await bcrypt.compare(oldPassword,user.password)
+        
+        if(!pwdCompare)
+            return responseCreator(res,401,'No se pudo modificar la contraseña')
+            
+        const nuevoPassword = await bcrypt.hash(newPassword,saltRounds);
+        
+        await User.findByIdAndUpdate (id,{password: nuevoPassword})
+            
+        return responseCreator(res,200,'Password actualizado correctamente');
+    
+    
+    } catch (error) {
+        console.log(error)
+        return responseCreator(res,500,'error al actualizar el password')
     }
+    
 }
 
 

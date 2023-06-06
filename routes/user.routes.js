@@ -23,7 +23,7 @@ api.post('/login', userController.login)
 api.delete('/users/:id', [ jwtVerify, isAdmin  ] ,userController.deleteUser);
 
 //Modificar usuario
-api.put('/users/:id', userController.updateUser);
+api.put('/users/:id/password', userController.updateUser);
 
 //Modificar password
 api.patch('/users/:id/password', userController.updatePassword);

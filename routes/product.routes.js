@@ -2,6 +2,8 @@ const express = require('express');
 const api = express.Router();
 const productController = require('./../controllers/product.controller');
 const uploadController = require('../controllers/upload.controller');
+const jwtVerify = require('../middlewares/jwtVerify');
+const isAdmin = require('../middlewares/isAdmin');
 
 
 //obtener producto
@@ -14,13 +16,13 @@ api.get('/product/:id', productController.getProduct);
 api.post('/product', productController.addProduct);
 
 //eliminar un producto
-api.delete('/product/:id', productController.deleteProduct);
+api.delete('/product/:id', [jwtVerify, isAdmin], productController.deleteProduct);
 
 
-api.post('/product', uploadController.uploadProduct, productController.addProduct);
+//api.post('/product',[jwtVerify, isAdmin], uploadController.uploadProduct, productController.addProduct);
 
 //modificar un producto
-api.put('/product/', productController.updateProduct);
+api.put('/product/:id', [jwtVerify, isAdmin], productController.updateProduct);
 
 
 
