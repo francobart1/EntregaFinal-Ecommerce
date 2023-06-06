@@ -1,7 +1,7 @@
 const signIn = document.getElementById('sign-in');
 const navbarList = document.getElementById('navbar-list')
-
-
+const badgeHTML = document.getElementById('cart-count')
+let Order = JSON.parse(localStorage.getItem('order')) || [];
 
 
 function renderHeaderLinks () {
@@ -10,7 +10,7 @@ function renderHeaderLinks () {
 
 
 if(currentUser) {
-    signIn.innerHTML = `<div onclick='logout()' style="cursor: pointer;" class="navbar__nav-link">Logout</div>`
+    signIn.innerHTML = `<div onclick='logout()' " href="/login" style="cursor: pointer;" class="navbar__nav-link">Logout</div>`
 
     const adminProductLink = createListItemElement('admin-product','Admin Product');
     
@@ -66,11 +66,20 @@ function logout() {
     }
     localStorage.removeItem("currentUser");
     localStorage.removeItem("token");
-    sessionStorage.removeItem("order");
     
         renderHeaderLinks();
 }
 
+function contarProductos(){
+    Order = JSON.parse(sessionStorage.getItem('order')) || [];
+    let cantidad = 0;
+    Order.forEach((prod) => {
+        cantidad += prod.cant; 
+    })
+    badgeHTML.innerText = cantidad;
+}
+
+contarProductos();
 
 renderHeaderLinks();
 

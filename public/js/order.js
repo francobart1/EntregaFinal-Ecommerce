@@ -1,19 +1,21 @@
 let Products = JSON.parse(localStorage.getItem('order')) || [];
-let Order = JSON.parse(localStorage.getItem('order')) || [];
+const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+const URL = 'http://localhost:9000/api';
 
-const badgeHTML = document.getElementById('cart-count')
 
 
-function contarProductos(){
-    Order = JSON.parse(localStorage.getItem('order')) || [];
-    let cantidad = 0;
-    Order.forEach((prod) => {
-        cantidad += prod.cant; 
-    })
-    badgeHTML.innerText = cantidad;
+
+async function cargarOrdenes(){
+    try {
+        
+        const respuesta = await axios.get(`${URL}/orders/${currentUser._id}/user`)
+        const orders = respuesta.data.Ordenes;
+        renderizarTabla(orders)
+        
+    } catch (error) {
+        console.log(error)
+    }
 }
-
-contarProductos();
 
 const tableBody = document.getElementById('table-body');
 
@@ -27,20 +29,20 @@ function renderizarTabla(){
         return;
     }
     
-    Products.forEach((product,index)=>{
+    Products.forEach((producto,index)=>{
         let imageSrc = '/assest/image/no-product.png';
-    if(product.image) 
-            imageSrc  = product.image;
+    if(producto.image) 
+            imageSrc  = producto.image;
     const tableRow = `
     <tr>
                 <td>
-                    <img class= "order__img" src="${imageSrc}" alt="${product.name}" width="80px">
+                    <img class= "order__img" src="${imageSrc}" alt="${producto.name}" width="80px">
                 </td>
                 <td>
-                    ${product.name}
+                    ${producto.name}
                 </td>
                 <td class="order__price">
-                    $ ${product.price}
+                    $ ${producto.price}
                 </td>
                 <td class="order__cant">
                     <div class="order-cant-btn">
@@ -49,7 +51,7 @@ function renderizarTabla(){
                         -
                         </button>
                     <input class="order-cant-btn__input" id="order-cant-input${index}" type="text" 
-                    value="${product.cant}" onchange="cantidadTotal('${index}')">
+                    value="${producto.cant}" onchange="cantidadTotal('${index}')">
                         <button class="order-cant-btn__increment" onclick="increment('${index}')"
                         id="order-cant-btn__increment">
                         +
@@ -57,7 +59,7 @@ function renderizarTabla(){
                     </div>
                 </td>
                 <td class="order__total">
-                $ ${product.total}
+                $ ${producto.total}
                 
                 </td>
                 <td><button class= "order__delete-btn" onclick= "deleteProduct(${index})" >
@@ -69,7 +71,7 @@ function renderizarTabla(){
             </tr>
     ` 
     tableBody.innerHTML += tableRow; 
-    totalOrden += product.total;
+    totalOrden += producto.total;
     })
     const tableRow = `
         <tr>
@@ -85,6 +87,7 @@ function renderizarTabla(){
 }
 
 renderizarTabla();
+cargarOrdenes();
 
 
 function deleteProduct(id){
@@ -133,20 +136,51 @@ contarProductos();
 }
 
 
-function finalizarCompra(){
+async function finalizarCompra(){
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     if(!currentUser){
-    showAlert('Debe estar logueado para poder Finalizar la compra','advertencia')
+    showAlert('Debe estar logueado para poder Finalizar la compra','info')
     } 
     else{
     if(Products.length === 0){
-        showAlert('Debe seleccionar un producto para poder Finalizar la compra','advertencia')
+        showAlert('Debe seleccionar un producto para poder Finalizar la compra','info')
     }else{
-        localStorage.removeItem('order')
+        try {
+        let totalOrden = 0;  
+        const orden = {};
+        const productos = [];
+        Products.forEach((product) => {
+        const producto = {
+            productId: product.id,
+            quantity: product.cant,
+            price: product.price
+        }
+        totalOrden += product.total
+        productos.push(producto)
+        });
+        
+        orden.products = productos;
+        orden.total = totalOrden;
+        orden.userId = currentUser._id;
+        orden.createdAt = Date.now;
+        orden.status = 'onhold';
+        orden.updateAt = Date.now;
+        
+        await axios.post(`${URL}/orders`,orden);
+        
+        sessionStorage.removeItem('order')
         Products = [];
         renderizarTabla();
         showAlert('Compra Finalizada','exito')
         contarProductos();
+        } catch (error) {
+        showAlert('No se pudo procesar la Orden','error');
+        console.log(error);
+        }
+
+
+
+        
     }
     
     } 

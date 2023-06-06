@@ -1,6 +1,11 @@
 const URL = 'http://localhost:9000/api';
+const token = localStorage.getItem('token');
 const cardContainer = document.querySelector('#card-container');
 let Products = [];
+let orderUser = JSON.parse(localStorage.getItem("currentUser"))
+let productOrder = JSON.parse(sessionStorage.getItem("order"))
+let orderArray = [];
+let cart = []
 
 async function cargarProductos(){
     try {
@@ -58,10 +63,16 @@ function renderizarProductos(products) {
 }
 cargarProductos();
 
-function addToOrder(id){
-    const product = productsLS[id];
+async function addToOrder(id) {
+    try {
+        
+        const respuesta = await axios.get(`${URL}/products/${id}` );
+        const product = respuesta.data.product;
+    if (!product)
+        return showAlert('No se encontro el producto','info')   
         
     const newOrder = {
+        id: product._id,
         image: product.image,
         name: product.name,
         price: product.price,
@@ -72,45 +83,56 @@ function addToOrder(id){
         
     const prod = Order.find((prod)=>{
         if(prod.name === product.name){
-        prod.cant = parseInt(prod.cant) + 1 ;
-        prod.total = prod.cant * parseInt(prod.price);
-        return prod;
+          prod.cant = parseInt(prod.cant) + 1 ;
+          prod.total = prod.cant * parseInt(prod.price);
+          return prod;
         }
-    })
-
-    if(!prod) {
+      })
+  
+      if(!prod) {
         Order.push(newOrder);
+      }
+
+    //Guardarlo en el local storage
+    sessionStorage.setItem('order',JSON.stringify( Order));
+
+    //Alerta de Producto agregado
+    showAlert('Producto agregado al carrito','exito')
+
+    contarProductos();
+
+
+
+    } catch (error) {
+        console.log(error)
     }
 
-//Guardarlo en el local storage
-localStorage.setItem('order',JSON.stringify(Order));
-
-//Alerta de Producto agregado
-showAlert('Producto agregado al carrito','exito')
-
-contarProductos();
-
 }
-function metodoFilter(evt) {
-
-    const text = evt.target.value.toLowerCase();
-
-    const filterProducts = productsLS.filter((product) => {
-        console.log(product.name)
-        const filtra = product.name.toLowerCase().includes(text.toLowerCase());
-
-        return filtra;
-
-
-    });
-    
-    renderizarProductos(filterProducts)
-    console.log(filterProducts.length)
-    const encontrar = document.getElementById('found');
-    encontrar.innerHTML = `Se encontraron ${filterProducts.length} productos.`
+function buscarProductosInput(evt){
+    if (evt.keyCode !== 13) return;
+    const text = evt.target.value.toLowerCase().trim();
+    buscarProductos(text)
 }
 
-renderizarProductos(productsLS);
+
+
+function buscarProductos(text){
+    const productsFiltrados = Products.filter((product) => {
+            const filtra = product.name.toLowerCase().includes(text.toLowerCase())
+            return filtra
+            });
+
+const cant = productsFiltrados.length;
+
+document.getElementById('found').innerText = 'Se encontraron ' + cant + ' productos';
+
+renderizarProductos(productsFiltrados);
+
+}
+
+
+
+
 
 
 

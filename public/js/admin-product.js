@@ -33,24 +33,23 @@ const tableBody = document.getElementById('table-body')
 
 
 
-function renderizarTabla(arrayProductos){
+function renderizarTabla(products){
     
     tableBody.innerHTML = ""; 
 
-    if(arrayProductos.length === 0){
-        tableBody.innerHTML = `<tr class="disabled"><td colspan="6">NO SE ENCONTRARON PRODUCTOS</td></tr>`; 
-
-        return
-    }
-    arrayProductos.forEach((producto) =>{   
+    if(products.length === 0) {
+        tableBody.innerHTML = '<tr class="disable"> <td colspan = 6>NO SE ENCONTRARON PRODUCTOS </td></tr>';
+        return;
+    } 
+    products.forEach((producto) =>{   
         
     
-        let imageSrc = producto.image ? `${URL_public}/upload/product/ ${producto.image}` : '/assets/no-product.png';
+       
 
         const tableRow = `
                             <tr class="product">
                                 <td class="product__img-cell">
-                                    <img class= "product__img" src="${imageSrc}" alt="${producto.name}">                    
+                                    <img class= "product__img" src="${producto.image}" id="inputFile" alt="${producto.name}">                    
                                 </td>
                                 <td class= "product__name">
                                     ${producto.name}
@@ -101,7 +100,7 @@ async function addProduct(evt){
         if (editIndex) { 
             
             console.log( updateProduct)
-            const respuesta = await axios.put(`${URL}/product/${editIndex}`,updateProduct,{
+            const respuesta = await axios.put(`${URL}/products/${editIndex}`,updateProduct,{
             headers: {
                 Authorization: token,
                 'Content-Type': 'application/json'
@@ -121,7 +120,7 @@ async function addProduct(evt){
                 icon: 'success',
             })
             }else {
-            const respuesta = await axios.post(`${URL}/product`,formFile,{
+            const respuesta = await axios.post(`${URL}/products`,formFile,{
             headers: { Authorization: token,
                         'Content-Type': 'application/json' },
             body: updateProduct
@@ -163,7 +162,7 @@ async function deleteProduct(id) {
         if (value === `delete`) {
             
             try {
-                const respuesta = await axios.delete(`${URL}/product/${id}`,{
+                const respuesta = await axios.delete(`${URL}/products/${id}`,{
                     headers: { Authorization: token } });
                 cargarProductos()
             } catch (error) {
@@ -195,7 +194,7 @@ async  function editProduct(id){
     submitBtn.innerText = 'Modificar Producto'
 
     const token = localStorage.getItem('token');
-    const response = await axios.put(`${URL}/product/${id}`,{
+    const response = await axios.put(`${URL}/products/${id}`,{
         headers: {
         Authorization: token,
         'Content-Type': 'application/json'
@@ -219,6 +218,34 @@ async  function editProduct(id){
     //mandar el objeto al bakend al endpoint de hacer put, una vez resuelto,vuelven a pedir los productos
 }
 
+
+function actualizarImg(id) {
+    var inputFile = document.getElementById('inputFile');
+ // Asignar una función al evento onchange del campo de entrada de archivos
+    inputFile.onchange = function() {
+    obtenerNombreImagen(id);
+    };
+    // Simular un clic en el campo de entrada de archivos
+    inputFile.click();
+  }
+
+  async function obtenerNombreImagen(id) {
+    try {
+        const inputFile = document.getElementById('inputFile');
+        // Obtener el nombre del archivo seleccionado
+         
+        const formData = new FormData();
+            formData.append("image", inputFile.files[0] );
+
+        const response = await axios.put(`${URL}/products/${id}/image`,formData,{
+            headers: {Authorization: token}});
+            
+        cargarProductos();
+        
+        } catch (error) {
+            console.log(error)
+        }
+}
 
 
 

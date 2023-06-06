@@ -2,23 +2,20 @@ const express = require('express');
 const api = express.Router();
 const ordersController = require('../controllers/order.controller');
 
-//obtener ordenes
-api.get('/orders', ordersController.getOrders);
+//obtener todas las ordenes
+api.get("/orders/:idUser/user",ordersController.getOrders)
 
-//obetener orden
-api.get('/orders/:id', ordersController.getOrderByID);
+//obtener una Orden por su id
+api.get("/orders/:id",ordersController.getOrder)
 
-//obtener por ID de usuario
-api.get('/orders/user/:id', ordersController.getOrderByID);
+//agregar una Orden
+api.post("/orders",ordersController.addOrder)
 
-//crear orden
-api.post('/orders', ordersController.createOrder);
+//Borrar una Orden
+api.delete("/orders/:id",ordersController.deleteOrder)
 
-//modificar orden
-api.put('/orders/:id', ordersController.UpdateOrder);
-
-//eliminar orden
-api.delete('/orders/:id', ordersController.deleteOrder);
+//actualizar una order
+api.put("/orders/",ordersController.updateOrder)
 
 
 

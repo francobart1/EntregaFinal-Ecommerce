@@ -75,7 +75,7 @@
                 <div class="section-cards__products-search-container">
                     
                     <div class="product-search">
-                        <input id="filter" onchange="metodoFilter(event)" type="text" class="product-search__input" placeholder="Buscar...">
+                        <input id="product-search" onkeyup="buscarProductosInput(event)" type="text" class="product-search__input" placeholder="Buscar...">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </div>
 
@@ -158,10 +158,12 @@
             </ul>
         </div>
     </footer>
+    
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> 
+    <script src="/js/alert.js"></script>
     <script src="/js/index.js"></script>
     <script src="/js/header.js"></script>
-    <script src="/js/order.js"></script>
     
 </body>
 </html>

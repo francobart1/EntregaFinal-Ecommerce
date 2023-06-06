@@ -47,7 +47,6 @@ async function addProduct(req, res){
 
 //Obtener productos
 const getProduct = async (req,res) => {
-    console.log(req, res)
     try {
         const idParam = req.params.id;
         if(!idParam){
@@ -55,7 +54,8 @@ const getProduct = async (req,res) => {
         mgs:`Es necesario que mande ID`
         })
         }
-        const product = await Product.findById(idParam).populate('category');    
+
+        const product = await Product.findById(idParam);    
         if(!product){
             return res.status(404).send({
                 mgs:`No se encontro el producto`

@@ -1,7 +1,9 @@
-
+const URL = 'http://localhost:9000/api';
+const URL_public = 'http://localhost:9000';
 const user = JSON.parse(localStorage.getItem('currentUser'));
 const params = window.location.search;
-
+const products = [];
+let product;
 
 console.log(params)
 
@@ -9,20 +11,21 @@ const paramsUrl= new URLSearchParams(params);
 
 const paramsEntries = Object.fromEntries(paramsUrl);
 
-const indice = paramsEntries.id;
+const index = params.split('id=')[1];
 
 
 console.log(paramsEntries)
 
-const products = JSON.parse(localStorage.getItem('Products'));
-const product = products[indice];
 
 
 
-function renderizarProductos() {
+async function renderizarProductos(id) {
+
+    try{
+        const respuesta = await axios.get(`${URL}/products/${id}`)
+        product = respuesta.data.product
     const detail = document.getElementById('detail')
 
-    const product = products[indice];
 
 detail.innerHTML = 
 
@@ -72,8 +75,9 @@ detail.innerHTML =
             </div>
         </div>
     </div>
-
-`
+    `} catch (error) {
+        console.log(error)
+    }
 
 
     }
@@ -82,7 +86,7 @@ detail.innerHTML =
 
 
 
-renderizarProductos(products);
+renderizarProductos(index);
 
 function aumentar(button) {
     var input = button.parentNode.querySelector('input[type="text"]');
@@ -105,12 +109,12 @@ function disminuir(button) {
 function addToCart(){
     const cantProd = document.getElementById("input-cant")        
     const newOrder = {
-        image: product.image,
+        id: product._id,
+        image: product.image ? `${URL_public}/upload/product/${product.image}` : '/assets/no-product.png',
         name: product.name,
         price: product.price,
         cant: parseInt(cantProd.value),
         total: parseInt(cantProd.value) * parseInt(product.price)
-        
     }
     
     const prod = Order.find((prod)=>{
@@ -144,6 +148,6 @@ const existe = Order.find((prod)=>{
 })
 if(!existe)
     addToOrder();
-window.location.href = "/pages/order/order.html";
+window.location.href = "/order";
 
 }

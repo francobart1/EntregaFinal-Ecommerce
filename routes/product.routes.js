@@ -10,19 +10,19 @@ const isAdmin = require('../middlewares/isAdmin');
 api.get('/products', productController.getAllProducts);
 
 //obtener un producto especifico
-api.get('/product/:id', productController.getProduct);
+api.get('/products/:id', productController.getProduct);
 
 //anadir un producto
-api.post('/product', productController.addProduct);
+api.post('/products', productController.addProduct);
 
 //eliminar un producto
-api.delete('/product/:id', [jwtVerify, isAdmin], productController.deleteProduct);
+api.delete('/products/:id', [jwtVerify, isAdmin], productController.deleteProduct);
 
 
-//api.post('/product',[jwtVerify, isAdmin], uploadController.uploadProduct, productController.addProduct);
+api.put("/products/:id/image",[jwtVerify,isAdmin],uploadController.uploadProduct,productController.updateProduct)
 
 //modificar un producto
-api.put('/product/:id', [jwtVerify, isAdmin], productController.updateProduct);
+api.put('/products/:id', [jwtVerify, isAdmin], productController.updateProduct);
 
 
 
