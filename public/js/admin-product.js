@@ -2,8 +2,8 @@
 let Products =  []; 
 const token = localStorage.getItem('token')
 
-const URL = 'http://localhost:9000/api';
-const URL_public = 'http://localhost:9000';
+const URL = 'https://ecommercer-franco-bartilotta.onrender.com/api';
+const URL_public = 'https://ecommercer-franco-bartilotta.onrender.com';
 
 const productForm = document.getElementById('add-product')
 let editIndex; 

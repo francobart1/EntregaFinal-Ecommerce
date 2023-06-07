@@ -1,5 +1,5 @@
-const URL = 'http://localhost:9000/api';
-const URL_public = 'http://localhost:9000';
+const URL = 'https://ecommercer-franco-bartilotta.onrender.com/api';
+const URL_public = 'https://ecommercer-franco-bartilotta.onrender.com';
 const user = JSON.parse(localStorage.getItem('currentUser'));
 const params = window.location.search;
 const products = [];

@@ -1,7 +1,7 @@
 const registerForm = document.querySelector('#registerForm');
 //obtener boton submit
 const resgisterBtn = document.getElementById('registerSubmit');
-const URL = 'http://localhost:9000/api';
+const URL = 'https://ecommercer-franco-bartilotta.onrender.com/api';
 
 registerForm.addEventListener('submit', async (evt)=>{
 

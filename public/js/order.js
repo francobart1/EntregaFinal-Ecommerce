@@ -1,6 +1,6 @@
 let Products = JSON.parse(localStorage.getItem('order')) || [];
 const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-const URL = 'http://localhost:9000/api';
+const URL = 'https://ecommercer-franco-bartilotta.onrender.com/api';
 
 
 

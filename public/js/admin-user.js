@@ -5,7 +5,7 @@ let pass2Input = document.getElementById('password2');
 const passForm = document.querySelectorAll('.password-form');
 
 
-const URL = 'http://localhost:9000/api';
+const URL = 'https://ecommercer-franco-bartilotta.onrender.com/api';
 
 
 async function cargarUsuarios() {

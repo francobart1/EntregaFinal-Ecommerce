@@ -1,4 +1,4 @@
-const URL = 'http://localhost:9000/api';
+const URL = 'https://ecommercer-franco-bartilotta.onrender.com/api';
 const token = localStorage.getItem('token');
 const cardContainer = document.querySelector('#card-container');
 let Products = [];
