@@ -47,7 +47,7 @@ function  createLinkElement(path, text) {
     const link = document.createElement('a');
     link.classList.add('navbar__nav-link');
     link.href = `${path}`;
-    link.innerText = text;
+    link.innerHTML = text;
     
     return link;
 }

@@ -49,10 +49,11 @@ const addOrder = async (req,res) => {
 
 const deleteOrder = async (req,res) => {
     try {
-        const id = req.params.idOrder;
-        const deleted = Order.findByIdAndDelete(id)
+        const id = req.params.id;
+        const deleted = await Order.findByIdAndDelete(id)
+        console.log(deleted)
         if(!deleted){
-        return res.status(404).send({mgr:'no se encontro la orden a borrar'});
+        return res.status(404).send({msg:'no se encontro la orden a borrar'});
         }
         return res.status(200).send({
             msg: 'Orden borrada correctamente',

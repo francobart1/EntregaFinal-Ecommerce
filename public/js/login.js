@@ -1,6 +1,6 @@
 
 const loginForm = document.getElementById('loginForm');
-const URL = 'http://localhost:9000/api';
+
 
 loginForm.addEventListener('submit',async (event) => {
     event.preventDefault();

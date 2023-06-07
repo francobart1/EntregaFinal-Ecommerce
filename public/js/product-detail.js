@@ -62,7 +62,7 @@ detail.innerHTML =
                     </div>
                 </div>
                 <div class= "container-detail__comprar-container">
-                    <a class="container-detail__btn" onclick="addToOrder()" ${user ? "" : "disabled"} >
+                    <a class="container-detail__btn" onclick="addToOrder()" } >
                         Comprar ahora
                     </a>
                 </div>
@@ -130,7 +130,7 @@ function addToCart(){
     }
 
 // //Guardarlo en el local storage
-localStorage.setItem('order',JSON.stringify( Order));
+localStorage.setItem('order',JSON.stringify(Order));
 
 contarProductos();
 
@@ -139,15 +139,36 @@ showAlert('Producto agregado a la Orden','exito');
 
 }
 
-function addToOrder(){
-
-const existe = Order.find((prod)=>{
-    if(product.name === product.name){
-        return prod;
+function addT(){
+    const cantProd = document.getElementById("product-detail-container-order-params__num")        
+    const newOrder = {
+        id: product._id,
+        image: product.image ? `${URL}/upload/product/${product.image}` : '/assets/images/no-product.png',
+        name: product.name,
+        price: product.price,
+        cant: parseInt(cantProd.value),
+        total: parseInt(cantProd.value) * parseInt(product.price)
+        
     }
-})
-if(!existe)
-    addToOrder();
-window.location.href = "/order";
+    
+    const prod = Order.find((prod)=>{
+      if(prod.name === product.name){
+        prod.cant = parseInt(prod.cant) + parseInt(cantProd.value);
+        prod.total = prod.cant * parseInt(prod.price);
+        return prod;
+      }
+    })
+
+    if(!prod) {
+      Order.push(newOrder);
+    }
+
+//Guardarlo en el local storage
+sessionStorage.setItem('order',JSON.stringify( Order));
+
+contarProductos();
+
+//Alerta de Producto agregado
+showAlert('Producto agregado a la Orden','exito');
 
 }
